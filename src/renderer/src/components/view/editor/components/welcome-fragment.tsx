@@ -1,4 +1,4 @@
-import { Github, FileText, Database, Zap, Globe, Layers, Clock, ArrowRight, Search, Plus, Users } from "lucide-react";
+import { Github, FileText, Zap, Globe, Layers, ArrowRight } from "lucide-react";
 import { useAtom } from "jotai";
 import { useEffect } from "react";
 import {
@@ -138,25 +138,28 @@ export function WelcomeFragment() {
                             <p className="text-sm text-gray-500 dark:text-gray-400">未找到推荐的配置文件</p>
                         </div>
                     ) : (
-                        <div className="grid grid-cols-2 gap-3">
+                        <div className="flex flex-col gap-2">
                             {recommendedFiles.map((file, index) => (
                                 <button
                                     key={index}
                                     onClick={() => handleRecommendedFileClick(file)}
-                                    className="flex flex-col gap-2 p-3 rounded-xl border border-gray-200 dark:border-white/5 bg-gray-50 dark:bg-white/[0.02] hover:bg-gray-100 dark:hover:bg-white/[0.05] hover:border-gray-300 dark:hover:border-white/10 hover:shadow-sm transition-all text-left group"
+                                    className="flex items-center gap-4 p-3 rounded-lg border border-gray-200 dark:border-white/10 hover:border-blue-500/20 dark:hover:border-blue-400/20 bg-gray-50/50 dark:bg-white/[0.02] hover:bg-blue-50/50 dark:hover:bg-blue-950/20 transition-all text-left group"
                                 >
-                                    <div className="flex items-start gap-2.5">
-                                        <div className="p-1.5 rounded-lg bg-white dark:bg-white/5 border border-gray-200 dark:border-white/5 group-hover:border-blue-300 dark:group-hover:border-blue-400/20 transition-colors shrink-0">
-                                            <FileText className="w-3.5 h-3.5 text-blue-500 dark:text-blue-400" />
-                                        </div>
-                                        <h3 className="text-xs font-medium text-gray-900 dark:text-white group-hover:text-blue-600 dark:group-hover:text-blue-400 transition-colors truncate flex-1">
-                                            {file.filePath.split('/').pop() || file.filePath}
-                                        </h3>
+                                    <div className="p-2 rounded-md bg-white dark:bg-white/5 border border-gray-200 dark:border-white/10 group-hover:border-blue-200 dark:group-hover:border-blue-400/30 transition-colors">
+                                        <FileText className="w-4 h-4 text-blue-500 dark:text-blue-400" />
                                     </div>
-                                    <p className="text-[10px] text-gray-500 dark:text-gray-400 truncate pl-0.5">{file.filePath}</p>
-                                    {file.description && (
-                                        <p className="text-[10px] text-gray-400 dark:text-gray-500 line-clamp-2 pl-0.5">{file.description}</p>
-                                    )}
+                                    <div className="flex-1 overflow-hidden">
+                                        <div className="flex items-baseline gap-2">
+                                            <h3 className="text-sm font-medium text-gray-800 dark:text-gray-200 group-hover:text-blue-600 dark:group-hover:text-blue-400 transition-colors truncate">
+                                                {file.filePath.split('/').pop() || file.filePath}
+                                            </h3>
+                                            <p className="text-xs text-gray-400 dark:text-gray-500 truncate flex-1">{file.filePath}</p>
+                                        </div>
+                                        {file.description && (
+                                            <p className="text-xs text-gray-500 dark:text-gray-400 mt-1 line-clamp-1">{file.description}</p>
+                                        )}
+                                    </div>
+                                    <ArrowRight className="w-4 h-4 text-gray-400 dark:text-gray-600 group-hover:text-blue-500 dark:group-hover:text-blue-400 transition-transform group-hover:translate-x-1" />
                                 </button>
                             ))}
                         </div>
