@@ -1,9 +1,9 @@
 import { Button } from "@/components/ui/button";
-import { Github, FileText, Plus } from "lucide-react";
+import { Github, FileText, Server, Code, Database, Settings, PanelLeft, Bot, Zap, Globe, Box, Layers, Terminal, Command, Cpu, Plus, FolderOpen, Book, Clock, ArrowRight, Search, GripVertical, Play, Square, Hexagon, Info, MemoryStick, HardDrive, Wifi, Users } from "lucide-react";
 import { useAtom } from "jotai";
 import { useEffect } from "react";
-import { 
-    recommendedConfigFilesAtom, 
+import {
+    recommendedConfigFilesAtom,
     isLoadingRecommendedFilesAtom,
     fileInfosAtom,
     nowFileIdAtom,
@@ -43,7 +43,7 @@ export function WelcomeFragment() {
     const handleRecommendedFileClick = (recommendedFile: RecommendedConfigFile) => {
         // 检查文件是否已经在列表中
         const existingFile = fileInfos.find(file => file.filePath === recommendedFile.filePath);
-        
+
         if (existingFile) {
             // 如果已存在，直接打开
             setNowFileId(existingFile.id);
@@ -55,7 +55,7 @@ export function WelcomeFragment() {
                 refreshCmd: recommendedFile.refreshCmd,
                 description: recommendedFile.description
             };
-            
+
             const newFileInfos = [newFileInfo, ...fileInfos];
             setFileInfos(newFileInfos);
             saveFileInfos(newFileInfos);
@@ -63,92 +63,140 @@ export function WelcomeFragment() {
         }
     };
 
-    return <div className="w-full h-[100%] p-8 pb-0 bg-content1 flex flex-col items-center heroui-transition" style={{ maxHeight: '100%', overflow: 'auto' }}>
-        <div className="flex flex-col max-w-4xl w-full">
-            <h2 className="text-3xl font-bold mb-8 text-foreground text-center">欢迎使用配置文件管理器</h2>
+    return <div className="relative w-full h-full bg-white dark:bg-[#030303] text-gray-900 dark:text-white overflow-hidden flex flex-col font-sans selection:bg-blue-500/20 dark:selection:bg-white/20">
+        {/* Cursor-style Background */}
+        <div className="absolute inset-0 z-0 pointer-events-none">
+            {/* Subtle gradient glow at the top */}
+            <div className="absolute top-[-20%] left-1/2 -translate-x-1/2 w-[1000px] h-[500px] bg-black/[0.02] dark:bg-white/[0.03] blur-[120px] rounded-full"></div>
 
-            <div className="border border-divider rounded-2xl p-6 mb-6 bg-content2 heroui-transition">
-                <h3 className="text-xl font-semibold mb-4 text-foreground flex items-center">
-                    <span className="w-2 h-2 bg-primary rounded-full mr-3"></span>
-                    快速入门
-                </h3>
-                <ol className="list-decimal list-inside space-y-3 text-default-500">
-                    <li>在左侧面板中，点击 <span className="font-medium text-primary px-2 py-1 bg-primary/10 rounded-md">+</span> 按钮引用新的配置文件</li>
-                    <li>点击文件名以选择并编辑配置文件</li>
-                    <li>使用顶部工具栏中的 <span className="font-medium text-success px-2 py-1 bg-success/10 rounded-md">保存</span> 按钮保存更改（可能需要权限）</li>
-                    <li>使用 <span className="font-medium text-warning px-2 py-1 bg-warning/10 rounded-md">刷新</span> 按钮重新加载配置文件（可自定义刷新命令）</li>
-                    <li>悬停在文件上可以看到移除按钮，点击即可移除文件</li>
-                    <li>点击下方推荐列表中的配置文件，快速添加到文件列表</li>
-                </ol>
-            </div>
+            {/* Grid pattern */}
+            <div className="absolute inset-0 bg-[linear-gradient(to_right,#80808012_1px,transparent_1px),linear-gradient(to_bottom,#80808012_1px,transparent_1px)] bg-[size:24px_24px] [mask-image:radial-gradient(ellipse_60%_50%_at_50%_0%,#000_70%,transparent_100%)]"></div>
+        </div>
 
-            {/* 推荐配置文件部分 */}
-            <div className="border border-divider rounded-2xl p-6 mb-6 bg-content2 heroui-transition">
-                <h3 className="text-xl font-semibold mb-4 text-foreground flex items-center">
-                    <span className="w-2 h-2 bg-warning rounded-full mr-3"></span>
-                    推荐配置文件
-                </h3>
-                {isLoading ? (
-                    <div className="text-center py-4 text-default-500">
-                        正在扫描配置文件...
+        {/* Main Content - App Welcome Screen */}
+        <div className="flex-1 overflow-y-auto custom-scrollbar flex flex-col items-center">
+            <div className="w-full max-w-2xl px-6 flex flex-col gap-8">
+
+                {/* Brand Header */}
+                <div className="text-center space-y-4 mt-6">
+                    <div className="w-full flex justify-center">
+                        <a
+                            href="https://github.com/heroisuseless/configeditor"
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-emerald-50 text-emerald-700 border border-emerald-200 hover:bg-emerald-100 transition-colors dark:bg-emerald-500/10 dark:text-emerald-300 dark:border-emerald-500/20 dark:hover:bg-emerald-500/20"
+                        >
+                            <Github className="w-4 h-4" />
+                            <span className="text-xs">如果喜欢 Envis，去 GitHub 点个 Star</span>
+                            <ArrowRight className="w-3.5 h-3.5 opacity-70" />
+                        </a>
                     </div>
-                ) : recommendedFiles.length > 0 ? (
-                    <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
-                        {recommendedFiles.map((file, index) => (
-                            <div
-                                key={index}
-                                onClick={() => handleRecommendedFileClick(file)}
-                                className="flex items-center p-3 bg-content1 rounded-lg border border-divider hover:border-primary hover:bg-primary/5 cursor-pointer heroui-transition group"
-                            >
-                                <FileText className="h-4 w-4 text-primary mr-3 flex-shrink-0" />
-                                <div className="flex-1 min-w-0">
-                                    <div className="text-sm font-medium text-foreground truncate">
-                                        {file.description}
-                                    </div>
-                                    <div className="text-xs text-default-500 truncate">
-                                        {file.filePath}
-                                    </div>
+                    <div>
+                        <h1 className="text-3xl font-medium tracking-tight text-gray-900 dark:text-white mb-2">Envis</h1>
+                        <p className="text-gray-500 dark:text-gray-400 text-sm">一款全平台环境管理软件</p>
+                    </div>
+                </div>
+
+                {/* Quick Actions */}
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                    <ActionCard
+                        icon={<Plus className="w-5 h-5 text-blue-500 dark:text-blue-400" />}
+                        title="New Environment"
+                        desc="Create a new service stack"
+                    />
+                    <ActionCard
+                        icon={<Terminal className="w-5 h-5 text-yellow-500 dark:text-yellow-400" />}
+                        title="Open Terminal"
+                        desc="Import existing configuration"
+                    />
+                    <ActionCard
+                        icon={<Zap className="w-5 h-5 text-purple-500 dark:text-purple-400" />}
+                        title="AI Assistant"
+                        desc="Chat with AI"
+                    />
+                    <ActionCard
+                        icon={<Book className="w-5 h-5 text-emerald-500 dark:text-emerald-400" />}
+                        title="Documentation"
+                        desc="Learn how to use Envis"
+                        onClick={() => window.open('https://github.com/heroisuseless/configeditor', '_blank')}
+                    />
+                </div>
+
+                {/* Usage Scenarios */}
+                <div className="space-y-3">
+                    <h2 className="text-xs font-medium text-gray-500 uppercase tracking-wider px-1">使用场景</h2>
+                    <div className="grid grid-cols-1 gap-3">
+                        {[
+                            {
+                                icon: <Zap className="w-5 h-5 text-orange-500 dark:text-orange-400" />,
+                                title: "极速环境搭建",
+                                description: "开发一个新项目，搭建环境往往是最难的，下载困难，配置繁琐，依赖错误，这时候就可以用envis一键下载安装服务程序，告别繁琐的手动配置与依赖排错，让项目立即进入可运行状态"
+                            },
+                            {
+                                icon: <Layers className="w-5 h-5 text-blue-500 dark:text-blue-400" />,
+                                title: "多项目无缝切换",
+                                description: "多项目开发时，项目A需要node14，Java8，mysql，而另一个项目需要Node20，Java11，mariadb，每次切换项目开发都要先切换一串环境，比较麻烦，用envis可一键切换环境。轻松切换复杂的项目依赖。"
+                            },
+                            {
+                                icon: <Users className="w-5 h-5 text-emerald-500 dark:text-emerald-400" />,
+                                title: "团队环境标准化",
+                                description: "每个电脑都要配置一遍环境，比较麻烦，envis支持导出导入环境配置，一键搭建完全相同环境，让项目稳定运行起来。消除“在我电脑上能跑”的困扰，确保所有团队成员拥有一致的开发环境，保障项目在不同设备上的稳定运行。"
+                            }
+                        ].map((scenario, index) => (
+                            <div key={index} className="flex items-start gap-4 p-4 rounded-xl border border-gray-200 dark:border-white/5 bg-gray-50 dark:bg-white/[0.02] hover:bg-gray-100 dark:hover:bg-white/[0.05] hover:border-gray-300 dark:hover:border-white/10 transition-all group">
+                                <div className="mt-1 p-2 rounded-lg bg-white dark:bg-white/5 border border-gray-200 dark:border-white/5 group-hover:border-gray-300 dark:group-hover:border-white/10 transition-colors shrink-0">
+                                    {scenario.icon}
                                 </div>
-                                <Plus className="h-4 w-4 text-default-400 group-hover:text-primary ml-2 flex-shrink-0 heroui-transition" />
+                                <div>
+                                    <h3 className="text-sm font-medium text-gray-900 dark:text-white mb-1.5 group-hover:text-blue-600 dark:group-hover:text-blue-400 transition-colors">{scenario.title}</h3>
+                                    <p className="text-xs text-gray-500 dark:text-gray-400 leading-relaxed">{scenario.description}</p>
+                                </div>
                             </div>
                         ))}
                     </div>
-                ) : (
-                    <div className="text-center py-4 text-default-500">
-                        未找到推荐的配置文件
+                </div>
+
+                {/* Getting Started */}
+                <div className="space-y-3">
+                    <h2 className="text-xs font-medium text-gray-500 uppercase tracking-wider px-1">Getting Started</h2>
+                    <div className="grid grid-cols-3 gap-3">
+                        <Step number="1" title="Create" desc="New Environment" />
+                        <Step number="2" title="Configure" desc="Service Configuration" />
+                        <Step number="3" title="Run" desc="One-Click Start" />
                     </div>
-                )}
-            </div>
+                </div>
 
-            <div className="border border-divider rounded-2xl p-6 mb-6 bg-content2 heroui-transition">
-                <h3 className="text-xl font-semibold mb-4 text-foreground flex items-center">
-                    <span className="w-2 h-2 bg-success rounded-full mr-3"></span>
-                    功能亮点
-                </h3>
-                <ul className="list-disc list-inside space-y-3 text-default-500">
-                    <li>简洁直观的用户界面，支持浅色/深色主题</li>
-                    <li>快速管理和刷新多个配置文件</li>
-                    <li>文件路径一键复制</li>
-                    <li>支持本地和远程文件编辑</li>
-                    <li>实时文件状态监控</li>
-                </ul>
-            </div>
-
-            <div className="border border-divider rounded-2xl p-6 bg-content2 heroui-transition">
-                <h3 className="text-xl font-semibold mb-4 text-foreground flex items-center">
-                    <span className="w-2 h-2 bg-secondary rounded-full mr-3"></span>
-                    了解更多
-                </h3>
-                <p className="mb-4 text-default-500">访问我们的 GitHub 仓库，获取详细文档、报告问题或贡献代码：</p>
-                <Button 
-                    variant="outline" 
-                    className="flex items-center heroui-button heroui-button-ghost border border-divider hover:border-primary hover:bg-primary/5 heroui-transition rounded-lg shadow-none" 
-                    onClick={() => window.open('https://github.com/heroisuseless/configeditor', '_blank')}
-                >
-                    <Github className="mr-2 h-4 w-4" />
-                    访问 GitHub 仓库
-                </Button>
             </div>
         </div>
+
     </div>
+}
+
+function ActionCard({ icon, title, desc, onClick }: { icon: React.ReactNode, title: string, desc: string, onClick?: () => void }) {
+    return (
+        <button
+            onClick={onClick}
+            className="flex items-start gap-4 p-4 rounded-xl border border-gray-200 dark:border-white/5 bg-gray-50 dark:bg-white/[0.02] hover:bg-gray-100 dark:hover:bg-white/[0.05] hover:border-gray-300 dark:hover:border-white/10 transition-all text-left group"
+        >
+            <div className="mt-1 p-2 rounded-lg bg-white dark:bg-white/5 border border-gray-200 dark:border-white/5 group-hover:border-gray-300 dark:group-hover:border-white/10 transition-colors">
+                {icon}
+            </div>
+            <div>
+                <h3 className="text-sm font-medium text-gray-900 dark:text-white mb-1 group-hover:text-blue-600 dark:group-hover:text-blue-400 transition-colors">{title}</h3>
+                <p className="text-xs text-gray-500 leading-relaxed">{desc}</p>
+            </div>
+        </button>
+    )
+}
+
+function Step({ number, title, desc }: { number: string, title: string, desc: string }) {
+    return (
+        <div className="flex flex-col items-center text-center p-3 rounded-lg border border-gray-200 dark:border-white/5 bg-gray-50/50 dark:bg-white/[0.02]">
+            <div className="w-6 h-6 rounded-full bg-gray-200 dark:bg-white/10 flex items-center justify-center text-xs font-bold text-gray-700 dark:text-white mb-2">
+                {number}
+            </div>
+            <div className="text-xs font-medium text-gray-900 dark:text-white">{title}</div>
+            <div className="text-[10px] text-gray-500 dark:text-gray-400">{desc}</div>
+        </div>
+    )
 }
