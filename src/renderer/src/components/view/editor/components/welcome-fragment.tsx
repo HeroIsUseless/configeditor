@@ -74,100 +74,20 @@ export function WelcomeFragment() {
 
         {/* Main Content - App Welcome Screen */}
         <div className="flex-1 overflow-y-auto custom-scrollbar flex flex-col items-center">
-            <div className="w-full max-w-2xl px-6 flex flex-col gap-8">
+            <div className="w-full max-w-3xl px-6 flex flex-col gap-10">
 
                 {/* Brand Header */}
-                <div className="text-center space-y-4 mt-6">
+                <div className="text-center space-y-4 mt-12">
                     <div>
-                        <h1 className="text-3xl font-medium tracking-tight text-gray-900 dark:text-white mb-2">配置文件管理器</h1>
-                        <p className="text-gray-500 dark:text-gray-400 text-sm">轻松管理和编辑您的配置文件</p>
+                        <h1 className="text-4xl font-semibold tracking-tight text-gray-900 dark:text-white mb-3">配置文件管理器</h1>
+                        <p className="text-gray-600 dark:text-gray-300 text-base">轻松管理和编辑您的配置文件</p>
                     </div>
-                </div>
-
-                {/* Quick Start */}
-                <div className="space-y-3">
-                    <h2 className="text-xs font-medium text-gray-500 uppercase tracking-wider px-1">快速入门</h2>
-                    <div className="grid grid-cols-1 gap-3">
-                        {[
-                            {
-                                icon: <Plus className="w-4 h-4" />,
-                                text: "在左侧面板中，点击 + 按钮引用新的配置文件"
-                            },
-                            {
-                                icon: <FileText className="w-4 h-4" />,
-                                text: "点击文件名以选择并编辑配置文件"
-                            },
-                            {
-                                icon: <Database className="w-4 h-4" />,
-                                text: "使用顶部工具栏中的 保存 按钮保存更改（可能需要权限）"
-                            },
-                            {
-                                icon: <Zap className="w-4 h-4" />,
-                                text: "使用 刷新 按钮重新加载配置文件（可自定义刷新命令）"
-                            },
-                            {
-                                icon: <Search className="w-4 h-4" />,
-                                text: "悬停在文件上可以看到移除按钮，点击即可移除文件"
-                            },
-                            {
-                                icon: <Clock className="w-4 h-4" />,
-                                text: "点击下方推荐列表中的配置文件，快速添加到文件列表"
-                            }
-                        ].map((item, index) => (
-                            <div key={index} className="flex items-center gap-3 p-3 rounded-lg border border-gray-200 dark:border-white/5 bg-gray-50/50 dark:bg-white/[0.02]">
-                                <div className="text-blue-500 dark:text-blue-400 shrink-0">
-                                    {item.icon}
-                                </div>
-                                <p className="text-xs text-gray-600 dark:text-gray-300">{item.text}</p>
-                            </div>
-                        ))}
-                    </div>
-                </div>
-
-                {/* Recommended Config Files */}
-                <div className="space-y-3">
-                    <h2 className="text-xs font-medium text-gray-500 uppercase tracking-wider px-1">推荐配置文件</h2>
-                    {isLoading ? (
-                        <div className="flex items-center justify-center p-8 rounded-xl border border-gray-200 dark:border-white/5 bg-gray-50 dark:bg-white/[0.02]">
-                            <div className="flex items-center gap-2 text-gray-500 dark:text-gray-400">
-                                <div className="w-4 h-4 border-2 border-gray-300 dark:border-gray-600 border-t-blue-500 dark:border-t-blue-400 rounded-full animate-spin"></div>
-                                <span className="text-sm">正在扫描配置文件...</span>
-                            </div>
-                        </div>
-                    ) : recommendedFiles.length === 0 ? (
-                        <div className="flex items-center justify-center p-8 rounded-xl border border-gray-200 dark:border-white/5 bg-gray-50 dark:bg-white/[0.02]">
-                            <p className="text-sm text-gray-500 dark:text-gray-400">未找到推荐的配置文件</p>
-                        </div>
-                    ) : (
-                        <div className="grid grid-cols-1 gap-3">
-                            {recommendedFiles.map((file, index) => (
-                                <button
-                                    key={index}
-                                    onClick={() => handleRecommendedFileClick(file)}
-                                    className="flex items-start gap-3 p-3 rounded-lg border border-gray-200 dark:border-white/5 bg-gray-50 dark:bg-white/[0.02] hover:bg-gray-100 dark:hover:bg-white/[0.05] hover:border-gray-300 dark:hover:border-white/10 transition-all text-left group"
-                                >
-                                    <div className="p-2 rounded-lg bg-white dark:bg-white/5 border border-gray-200 dark:border-white/5 group-hover:border-gray-300 dark:group-hover:border-white/10 transition-colors shrink-0 mt-0.5">
-                                        <FileText className="w-4 h-4 text-blue-500 dark:text-blue-400" />
-                                    </div>
-                                    <div className="flex-1 min-w-0">
-                                        <h3 className="text-sm font-medium text-gray-900 dark:text-white mb-1 group-hover:text-blue-600 dark:group-hover:text-blue-400 transition-colors">
-                                            {file.filePath.split('/').pop() || file.filePath}
-                                        </h3>
-                                        <p className="text-xs text-gray-500 dark:text-gray-400 truncate">{file.filePath}</p>
-                                        {file.description && (
-                                            <p className="text-xs text-gray-400 dark:text-gray-500 mt-1">{file.description}</p>
-                                        )}
-                                    </div>
-                                </button>
-                            ))}
-                        </div>
-                    )}
                 </div>
 
                 {/* Features */}
-                <div className="space-y-3">
+                <div className="space-y-4">
                     <h2 className="text-xs font-medium text-gray-500 uppercase tracking-wider px-1">功能亮点</h2>
-                    <div className="grid grid-cols-1 gap-3">
+                    <div className="grid grid-cols-2 gap-4">
                         {[
                             {
                                 icon: <Layers className="w-5 h-5 text-blue-500 dark:text-blue-400" />,
@@ -176,7 +96,7 @@ export function WelcomeFragment() {
                             },
                             {
                                 icon: <Zap className="w-5 h-5 text-orange-500 dark:text-orange-400" />,
-                                title: "快速管理和刷新多个配置文件",
+                                title: "快速管理多个配置文件",
                                 description: "高效的文件管理体验"
                             },
                             {
@@ -188,15 +108,10 @@ export function WelcomeFragment() {
                                 icon: <Globe className="w-5 h-5 text-purple-500 dark:text-purple-400" />,
                                 title: "支持本地和远程文件编辑",
                                 description: "灵活的文件访问方式"
-                            },
-                            {
-                                icon: <Clock className="w-5 h-5 text-yellow-500 dark:text-yellow-400" />,
-                                title: "实时文件状态监控",
-                                description: "及时了解文件变化"
                             }
                         ].map((feature, index) => (
-                            <div key={index} className="flex items-start gap-4 p-4 rounded-xl border border-gray-200 dark:border-white/5 bg-gray-50 dark:bg-white/[0.02] hover:bg-gray-100 dark:hover:bg-white/[0.05] hover:border-gray-300 dark:hover:border-white/10 transition-all group">
-                                <div className="mt-1 p-2 rounded-lg bg-white dark:bg-white/5 border border-gray-200 dark:border-white/5 group-hover:border-gray-300 dark:group-hover:border-white/10 transition-colors shrink-0">
+                            <div key={index} className="flex items-start gap-4 p-4 rounded-xl border border-gray-200 dark:border-white/5 bg-gray-50 dark:bg-white/[0.02] hover:bg-gray-100 dark:hover:bg-white/[0.05] hover:border-gray-300 dark:hover:border-white/10 hover:shadow-sm transition-all group">
+                                <div className="mt-1 p-2.5 rounded-xl bg-white dark:bg-white/5 border border-gray-200 dark:border-white/5 group-hover:border-gray-300 dark:group-hover:border-white/10 transition-colors shrink-0">
                                     {feature.icon}
                                 </div>
                                 <div>
@@ -208,18 +123,58 @@ export function WelcomeFragment() {
                     </div>
                 </div>
 
+                {/* Recommended Config Files */}
+                <div className="space-y-4">
+                    <h2 className="text-xs font-medium text-gray-500 uppercase tracking-wider px-1">推荐配置文件</h2>
+                    {isLoading ? (
+                        <div className="flex items-center justify-center p-10 rounded-xl border border-gray-200 dark:border-white/5 bg-gray-50 dark:bg-white/[0.02]">
+                            <div className="flex items-center gap-2 text-gray-500 dark:text-gray-400">
+                                <div className="w-5 h-5 border-2 border-gray-300 dark:border-gray-600 border-t-blue-500 dark:border-t-blue-400 rounded-full animate-spin"></div>
+                                <span className="text-sm">正在扫描配置文件...</span>
+                            </div>
+                        </div>
+                    ) : recommendedFiles.length === 0 ? (
+                        <div className="flex items-center justify-center p-10 rounded-xl border border-gray-200 dark:border-white/5 bg-gray-50 dark:bg-white/[0.02]">
+                            <p className="text-sm text-gray-500 dark:text-gray-400">未找到推荐的配置文件</p>
+                        </div>
+                    ) : (
+                        <div className="grid grid-cols-2 gap-3">
+                            {recommendedFiles.map((file, index) => (
+                                <button
+                                    key={index}
+                                    onClick={() => handleRecommendedFileClick(file)}
+                                    className="flex flex-col gap-2 p-3 rounded-xl border border-gray-200 dark:border-white/5 bg-gray-50 dark:bg-white/[0.02] hover:bg-gray-100 dark:hover:bg-white/[0.05] hover:border-gray-300 dark:hover:border-white/10 hover:shadow-sm transition-all text-left group"
+                                >
+                                    <div className="flex items-start gap-2.5">
+                                        <div className="p-1.5 rounded-lg bg-white dark:bg-white/5 border border-gray-200 dark:border-white/5 group-hover:border-blue-300 dark:group-hover:border-blue-400/20 transition-colors shrink-0">
+                                            <FileText className="w-3.5 h-3.5 text-blue-500 dark:text-blue-400" />
+                                        </div>
+                                        <h3 className="text-xs font-medium text-gray-900 dark:text-white group-hover:text-blue-600 dark:group-hover:text-blue-400 transition-colors truncate flex-1">
+                                            {file.filePath.split('/').pop() || file.filePath}
+                                        </h3>
+                                    </div>
+                                    <p className="text-[10px] text-gray-500 dark:text-gray-400 truncate pl-0.5">{file.filePath}</p>
+                                    {file.description && (
+                                        <p className="text-[10px] text-gray-400 dark:text-gray-500 line-clamp-2 pl-0.5">{file.description}</p>
+                                    )}
+                                </button>
+                            ))}
+                        </div>
+                    )}
+                </div>
+
                 {/* Learn More */}
-                <div className="space-y-3 pb-8">
+                <div className="space-y-4 pb-12">
                     <h2 className="text-xs font-medium text-gray-500 uppercase tracking-wider px-1">了解更多</h2>
-                    <div className="p-4 rounded-xl border border-gray-200 dark:border-white/5 bg-gray-50 dark:bg-white/[0.02]">
-                        <p className="text-xs text-gray-600 dark:text-gray-300 mb-3">
+                    <div className="p-5 rounded-xl border border-gray-200 dark:border-white/5 bg-gray-50 dark:bg-white/[0.02]">
+                        <p className="text-sm text-gray-600 dark:text-gray-300 mb-4 leading-relaxed">
                             访问我们的 GitHub 仓库，获取详细文档、报告问题或贡献代码：
                         </p>
                         <a
                             href="https://github.com/heroisuseless/configeditor"
                             target="_blank"
                             rel="noopener noreferrer"
-                            className="inline-flex items-center gap-2 px-4 py-2 rounded-lg bg-gray-900 dark:bg-white text-white dark:text-gray-900 hover:bg-gray-800 dark:hover:bg-gray-100 transition-colors text-sm font-medium"
+                            className="inline-flex items-center gap-2 px-5 py-2.5 rounded-lg bg-gray-900 dark:bg-white text-white dark:text-gray-900 hover:bg-gray-800 dark:hover:bg-gray-100 hover:shadow-md transition-all text-sm font-medium"
                         >
                             <Github className="w-4 h-4" />
                             <span>访问 GitHub 仓库</span>
