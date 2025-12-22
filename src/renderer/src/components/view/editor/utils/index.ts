@@ -49,7 +49,14 @@ export function saveFileInfos(newFileInfos: FileInfo[]) {
 }
 
 export function readFileInfos(): FileInfo[] {
-  const fileInfos: FileInfo[] = JSON.parse(localStorage.getItem(FILE_INFOS) || '[]')
+  console.log('zws 读取本地文件列表readFileInfos', localStorage.getItem(FILE_INFOS))
+  let fileInfos: FileInfo[] = [];
+  try {
+    fileInfos = JSON.parse(localStorage.getItem(FILE_INFOS) || '[]');
+  } catch (e) {
+    console.error('读取文件列表失败，数据格式错误：', e);
+    fileInfos = [];
+  }
   for (const fileInfo of fileInfos) {
     if (!fileInfo.id) {
       // 容错处理，补全 id 字段

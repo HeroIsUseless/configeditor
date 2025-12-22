@@ -12,7 +12,7 @@ const buttonVariants = cva(
         default: 'bg-primary text-primary-foreground shadow-heroui-sm hover:bg-primary/90 active:scale-95',
         destructive: 'bg-danger text-danger-foreground shadow-heroui-sm hover:bg-danger/90 active:scale-95',
         outline:
-          'border border-divider bg-background shadow-heroui-sm hover:bg-content2 dark:hover:bg-content3 hover:border-primary active:scale-95',
+          'border border-divider bg-background dark:bg-content3 shadow-heroui-sm hover:bg-content2 dark:hover:bg-content3 hover:border-primary active:scale-95',
         secondary: 'bg-content2 dark:bg-content3 text-foreground shadow-heroui-sm hover:bg-content3 dark:hover:bg-content4 active:scale-95',
         ghost: 'hover:bg-content2 dark:hover:bg-content3 hover:text-foreground active:scale-95',
         link: 'text-primary underline-offset-4 hover:underline active:scale-95'

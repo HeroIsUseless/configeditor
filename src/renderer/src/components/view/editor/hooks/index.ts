@@ -11,6 +11,7 @@ export function useInitConfigEditor() {
 
     useEffect(() => {
         const localFileInfos = readFileInfos()
+        console.log('zws 本地读取到的文件列表：', localFileInfos)
         setFileInfos(localFileInfos)
         const localAppSettings = readAppSettings()
         setAppSettings(localAppSettings)

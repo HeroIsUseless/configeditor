@@ -4,8 +4,8 @@ import { fileInfosAtom, nowFileIdAtom, isLeftPanelOpenAtom, isDebugPanelOpenAtom
 import { ScrollArea } from '@radix-ui/react-scroll-area'
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from '@/components/ui/tooltip'
 import { useAtom } from 'jotai'
+import icon from '@/assets/icon.png'
 import {
-    Atom,
     Trash2,
     Globe,
     ChevronLeft,
@@ -213,7 +213,7 @@ function SortableFileItem({ id, filePath, fileInfo, isRemoteFile, isSelected, is
                                             {fileInfo?.description || (filePath.split('/')?.pop() ?? '')}
                                         </span>
                                     </div>
-                                    <div className="text-xs text-gray-500 dark:text-gray-400 truncate">
+                                    <div className="text-xs font-mono text-gray-500 dark:text-gray-400 truncate">
                                         {filePath}
                                     </div>
                                 </div>
@@ -330,14 +330,14 @@ export function FileSidebar() {
     const isDragEnabled = searchName.trim() === '';
 
     return (
-        <div className="w-full h-full bg-gray-100 dark:bg-gray-800 flex flex-col" onClick={onCloseContextMenu}>
+        <div className="pr-1 w-full h-full bg-gray-100 dark:bg-gray-800 flex flex-col" onClick={onCloseContextMenu}>
             
             {/* Header */}
-            <div className="p-2">
-                <div className='flex justify-between items-center mb-1'>
+            <div className="mb-4">
+                <div className='p-[15px] pr-[0px] flex justify-between items-center'>
                     <h2 className="text-base font-semibold flex items-center text-gray-700 dark:text-gray-300">
-                        <Atom className="mr-2 h-5 w-5 heroui-transition hover:text-primary cursor-pointer" onClick={onShowDebugPanel} />
-                        <span onClick={onAppTitleClick} className="hidden sm:inline cursor-pointer hover:text-primary heroui-transition select-none">配置文件管理器</span>
+                        <img src={icon} className="h-[28px] w-[28px] mr-1 heroui-transition hover:opacity-80 cursor-pointer" onClick={onShowDebugPanel} alt="App Icon" />
+                        <span onClick={onAppTitleClick} className="hidden sm:inline cursor-pointer hover:text-primary heroui-transition select-none">ConfigEditor</span>
                     </h2>
                     <Button
                         onClick={onHideLeftPanel}
@@ -349,12 +349,12 @@ export function FileSidebar() {
                         <ChevronLeft className="h-4 w-4" />
                     </Button>
                 </div>
-                <div className="flex mb-1">
+                <div className="flex mb-1 pl-[15px]">
                     <Input
                         placeholder="搜索文件"
                         value={searchName}
                         onChange={(e) => setSearchName(e.target.value)}
-                        className="mr-1 h-8 text-sm bg-white dark:bg-gray-700 border-none focus:border-none dark:text-white heroui-transition rounded-lg shadow-none"
+                        className="mr-2 h-8 text-sm bg-white dark:bg-gray-700 dark:text-white heroui-transition rounded-lg shadow-none"
                     />
                     <AddFileButton />
                 </div>

@@ -58,7 +58,7 @@ export default function ConfigEditor() {
       >
         <FileSidebar />
       </ResizablePanel>
-      <ResizableHandle className="w-px bg-gray-100 dark:bg-gray-800 hover:bg-default heroui-transition" />
+      <ResizableHandle className=" bg-gray-100 dark:bg-gray-800 hover:bg-default heroui-transition" />
       <ResizablePanel 
         defaultSize={isAIPanelOpen ? 45 : 75}
         minSize={20}
