@@ -60,7 +60,7 @@ export function readFileInfos(): FileInfo[] {
   for (const fileInfo of fileInfos) {
     if (!fileInfo.id) {
       // 容错处理，补全 id 字段
-      fileInfo.id = fileInfo.filePath + '@' + (fileInfo.remoteInfo.host || '127.0.0.1');
+      fileInfo.id = fileInfo.filePath + '@' + (fileInfo.remoteInfo?.host || '127.0.0.1');
     }
   }
   return fileInfos;
