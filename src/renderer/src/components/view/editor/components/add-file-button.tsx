@@ -39,6 +39,12 @@ export function AddFileButton() {
     const [description, setDescription] = useState('')
 
     const onOk = () => {
+        // 验证文件路径不能为空
+        if (!filePath.trim()) {
+            alert('请输入文件路径')
+            return
+        }
+
         // 验证文件描述不能为空
         if (!description.trim()) {
             alert('请输入文件描述')
@@ -53,9 +59,11 @@ export function AddFileButton() {
         }
 
         // 检查文件是否已存在
-        if (filePaths.includes(filePath)) {
-            alert('文件已存在于列表中')
-            return
+        for (const info of fileInfos) {
+            if (info.filePath === filePath && info.remoteInfo?.host === host.trim()) {
+                alert('文件已存在于列表中')
+                return
+            }
         }
 
         if (isRemoteFile) {
