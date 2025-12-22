@@ -160,8 +160,7 @@ export function AddFileButton() {
             <DialogTrigger asChild>
                 <Button 
                     size="sm" 
-                    variant="outline" 
-                    className="px-2 h-8 w-8 rounded-lg shadow-none text-black dark:text-white heroui-transition"
+                    className="px-2 h-8 w-8 rounded-lg shadow-none text-white heroui-transition"
                 >
                     <Plus className="h-4 w-4" />
                 </Button>

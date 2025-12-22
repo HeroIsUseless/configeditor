@@ -66,10 +66,10 @@
     --background: 0 0% 0%;
     --foreground: 0 0% 93%;
 
-    --card: 240 3% 9%;
+    --card: 0 0% 9%;
     --card-foreground: 0 0% 93%;
 
-    --popover: 240 3% 9%;
+    --popover: 0 0% 9%;
     --popover-foreground: 0 0% 93%;
 
     --primary: 212 100% 47%;
@@ -78,21 +78,21 @@
     --secondary: 262 83% 65%;
     --secondary-foreground: 0 0% 100%;
 
-    --muted: 240 3% 11%;
+    --muted: 0 0% 11%;
     --muted-foreground: 0 0% 65%;
 
-    --accent: 240 3% 11%;
+    --accent: 0 0% 11%;
     --accent-foreground: 0 0% 93%;
 
     --destructive: 0 84% 60%;
     --destructive-foreground: 0 0% 100%;
 
-    --border: 240 3% 14%;
-    --input: 240 3% 11%;
+    --border: 0 0% 14%;
+    --input: 0 0% 11%;
     --ring: 212 100% 47%;
     
     /* HeroUI semantic colors dark */
-    --default: 240 3% 44%;
+    --default: 0 0% 44%;
     --default-foreground: 0 0% 93%;
     --success: 142 76% 36%;
     --success-foreground: 0 0% 100%;
@@ -102,19 +102,19 @@
     --danger-foreground: 0 0% 100%;
     
     /* HeroUI content colors dark */
-    --content1: 240 3% 9%;
+    --content1: 0 0% 9%;
     --content1-foreground: 0 0% 93%;
-    --content2: 240 3% 11%;
+    --content2: 0 0% 11%;
     --content2-foreground: 0 0% 85%;
-    --content3: 240 3% 14%;
+    --content3: 0 0% 14%;
     --content3-foreground: 0 0% 80%;
-    --content4: 240 3% 18%;
+    --content4: 0 0% 18%;
     --content4-foreground: 0 0% 75%;
     
     /* HeroUI focus and overlay dark */
     --focus: 212 100% 47%;
     --overlay: 0 0% 0%;
-    --divider: 240 3% 14%;
+    --divider: 0 0% 14%;
   }
 }
 
