@@ -49,7 +49,14 @@ export function saveFileInfos(newFileInfos: FileInfo[]) {
 }
 
 export function readFileInfos(): FileInfo[] {
-  return JSON.parse(localStorage.getItem(FILE_INFOS) || '[]')
+  const fileInfos: FileInfo[] = JSON.parse(localStorage.getItem(FILE_INFOS) || '[]')
+  for (const fileInfo of fileInfos) {
+    if (!fileInfo.id) {
+      // 容错处理，补全 id 字段
+      fileInfo.id = fileInfo.filePath + '@' + (fileInfo.remoteInfo.host || '127.0.0.1');
+    }
+  }
+  return fileInfos;
 }
 
 export const STORE_APP_SETTINGS = 'STORE_APP_SETTINGS';

@@ -11,7 +11,7 @@ import {
 import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
 import { Collapsible, CollapsibleContent, CollapsibleTrigger } from '@/components/ui/collapsible'
-import { FileInfo, fileInfosAtom, filePathsAtom, nowFilePathAtom } from '@/components/view/editor/store'
+import { FileInfo, fileInfosAtom, filePathsAtom, nowFileIdAtom } from '@/components/view/editor/store'
 import { useAtom } from 'jotai'
 import {
     FolderSearch,
@@ -25,7 +25,7 @@ const { ipcRenderer } = window.require('electron')
 
 export function AddFileButton() {
     const [filePath, setFilePath] = useState('')
-    const [, setNowFilePath] = useAtom(nowFilePathAtom)
+    const [, setNowFileId] = useAtom(nowFileIdAtom)
     const [fileInfos, setFileInfos] = useAtom(fileInfosAtom);
     const [filePaths] = useAtom(filePathsAtom)
     const [open, setOpen] = useState(false);
@@ -58,9 +58,11 @@ export function AddFileButton() {
             return
         }
 
+        const id = filePath + '@' + (isRemoteFile ? host.trim() : '127.0.0.1')
         // 检查文件是否已存在
         for (const info of fileInfos) {
-            if (info.filePath === filePath && info.remoteInfo?.host === host.trim()) {
+            console.log('zws 检查已存在文件: ', info.id, id)
+            if (info.id === id) {
                 alert('文件已存在于列表中')
                 return
             }
@@ -81,6 +83,7 @@ export function AddFileButton() {
                     // 连接成功，添加远程文件
                     const newFileInfos: FileInfo[] = [...fileInfos];
                     const fileInfo: FileInfo = {
+                        id,
                         filePath, 
                         refreshCmd: 'cat ' + filePath,
                         description: description.trim(),
@@ -89,7 +92,7 @@ export function AddFileButton() {
                     newFileInfos.unshift(fileInfo);
                     setFileInfos(newFileInfos)
                     saveFileInfos(newFileInfos)
-                    setNowFilePath(filePath)
+                    setNowFileId(fileInfo.id)
                     // resetForm()
                     setOpen(false)
                 } else {
@@ -104,6 +107,7 @@ export function AddFileButton() {
                 if (arg && arg.content && typeof arg.content === 'string') {
                     const newFileInfos: FileInfo[] = [...fileInfos];
                     const fileInfo: FileInfo = {
+                        id,
                         filePath, 
                         refreshCmd: 'cat ' + filePath,
                         description: description.trim()
@@ -111,7 +115,7 @@ export function AddFileButton() {
                     newFileInfos.unshift(fileInfo);
                     setFileInfos(newFileInfos)
                     saveFileInfos(newFileInfos)
-                    setNowFilePath(filePath)
+                    setNowFileId(fileInfo.id)
                     // resetForm()
                     setOpen(false)
                 } else {

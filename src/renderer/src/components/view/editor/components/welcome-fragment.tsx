@@ -6,7 +6,7 @@ import {
     recommendedConfigFilesAtom, 
     isLoadingRecommendedFilesAtom,
     fileInfosAtom,
-    nowFilePathAtom,
+    nowFileIdAtom,
     RecommendedConfigFile,
     FileInfo
 } from "../store";
@@ -18,7 +18,7 @@ export function WelcomeFragment() {
     const [recommendedFiles, setRecommendedFiles] = useAtom(recommendedConfigFilesAtom);
     const [isLoading, setIsLoading] = useAtom(isLoadingRecommendedFilesAtom);
     const [fileInfos, setFileInfos] = useAtom(fileInfosAtom);
-    const [, setNowFilePath] = useAtom(nowFilePathAtom);
+    const [, setNowFileId] = useAtom(nowFileIdAtom);
 
     // 加载推荐配置文件
     useEffect(() => {
@@ -46,10 +46,11 @@ export function WelcomeFragment() {
         
         if (existingFile) {
             // 如果已存在，直接打开
-            setNowFilePath(recommendedFile.filePath);
+            setNowFileId(existingFile.id);
         } else {
             // 如果不存在，创建新的文件信息
             const newFileInfo: FileInfo = {
+                id: recommendedFile.filePath + "@127.0.0.1",
                 filePath: recommendedFile.filePath,
                 refreshCmd: recommendedFile.refreshCmd,
                 description: recommendedFile.description
@@ -58,7 +59,7 @@ export function WelcomeFragment() {
             const newFileInfos = [newFileInfo, ...fileInfos];
             setFileInfos(newFileInfos);
             saveFileInfos(newFileInfos);
-            setNowFilePath(recommendedFile.filePath);
+            setNowFileId(newFileInfo.id);
         }
     };
 

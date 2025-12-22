@@ -21,22 +21,22 @@ export function useInitConfigEditor() {
     }, [setFileInfos, setAppSettings, initTheme])
 }
 
-export function useShowFilePaths(searchName: string) {
-    const [filePaths] = useAtom(filePathsAtom)
+export function useShowFileIds(searchName: string) {
+    const [fileInfos] = useAtom(fileInfosAtom)
 
     const searchResults = useMemo(() => {
         let res: string[] = []
         if (searchName.trim().length === 0) {
-            res = filePaths
+            res = fileInfos.map(f => f.id)
         } else {
-            for (const filePath of filePaths) {
-                if (isSubstr(filePath.trim(), searchName.trim())) {
-                    res.push(filePath)
+            for (const info of fileInfos) {
+                if (isSubstr(info.filePath.trim(), searchName.trim()) || (info.description && isSubstr(info.description.trim(), searchName.trim()))) {
+                    res.push(info.id)
                 }
             }
         }
         return res;
-    }, [searchName, filePaths])
+    }, [searchName, fileInfos])
 
     return searchResults
 }

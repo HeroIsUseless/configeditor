@@ -1,6 +1,6 @@
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
-import { fileInfosAtom, nowFilePathAtom, isLeftPanelOpenAtom, isDebugPanelOpenAtom, textContentAtom, newTextContentAtom, addDebugLogAtom } from '@/components/view/editor/store'
+import { fileInfosAtom, nowFileIdAtom, isLeftPanelOpenAtom, isDebugPanelOpenAtom, textContentAtom, newTextContentAtom, addDebugLogAtom } from '@/components/view/editor/store'
 import { ScrollArea } from '@radix-ui/react-scroll-area'
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from '@/components/ui/tooltip'
 import { useAtom } from 'jotai'
@@ -15,7 +15,7 @@ import {
     ChevronRight
 } from 'lucide-react'
 import { useState } from 'react'
-import { useShowFilePaths } from '../hooks'
+import { useShowFileIds } from '../hooks'
 import { saveFileInfos } from '../utils'
 import { AddFileButton } from './add-file-button'
 import { HistoryMenu } from './history-menu'
@@ -43,21 +43,22 @@ import {
 interface ContextMenuProps {
     x: number;
     y: number;
+    id: string;
     filePath: string;
     isRemoteFile: boolean;
     onClose: () => void;
-    onDelete: (filePath: string) => void;
+    onDelete: (id: string) => void;
     onShowInFinder: (filePath: string) => void;
 }
 
-function ContextMenu({ x, y, filePath, isRemoteFile, onClose, onDelete, onShowInFinder }: ContextMenuProps) {
+function ContextMenu({ x, y, id, filePath, isRemoteFile, onClose, onDelete, onShowInFinder }: ContextMenuProps) {
     const [isHistoryMenuOpen, setIsHistoryMenuOpen] = useState(false);
-    const [nowFilePath, setNowFilePath] = useAtom(nowFilePathAtom)
+    const [, setNowFileId] = useAtom(nowFileIdAtom)
     const [, setNewTextContent] = useAtom(newTextContentAtom);
     const [, addDebugLog] = useAtom(addDebugLogAtom);
 
     const handleDelete = () => {
-        onDelete(filePath);
+        onDelete(id);
         onClose();
     };
 
@@ -68,7 +69,7 @@ function ContextMenu({ x, y, filePath, isRemoteFile, onClose, onDelete, onShowIn
 
     const handleHistorySelect = (record: FileHistoryRecord) => {
         // 恢复历史版本内容
-        setNowFilePath(filePath);
+        setNowFileId(id);
         setTimeout(() => setNewTextContent(record.content), 0);
         addDebugLog(`已恢复到历史版本 (${new Date(record.timestamp).toLocaleString('zh-CN')})`, 'success');
         onClose();
@@ -126,17 +127,18 @@ function ContextMenu({ x, y, filePath, isRemoteFile, onClose, onDelete, onShowIn
 }
 
 interface SortableFileItemProps {
+    id: string;
     filePath: string;
     fileInfo: any;
     isRemoteFile: boolean;
     isSelected: boolean;
     isDragEnabled: boolean;
-    onSelect: (filePath: string) => void;
-    onDelete: (filePath: string) => void;
-    onContextMenu: (e: React.MouseEvent, filePath: string) => void;
+    onSelect: (id: string) => void;
+    onDelete: (id: string) => void;
+    onContextMenu: (e: React.MouseEvent, id: string) => void;
 }
 
-function SortableFileItem({ filePath, fileInfo, isRemoteFile, isSelected, isDragEnabled, onSelect, onDelete: _onDelete, onContextMenu }: SortableFileItemProps) {
+function SortableFileItem({ id, filePath, fileInfo, isRemoteFile, isSelected, isDragEnabled, onSelect, onDelete: _onDelete, onContextMenu }: SortableFileItemProps) {
     const {
         attributes,
         listeners,
@@ -145,7 +147,7 @@ function SortableFileItem({ filePath, fileInfo, isRemoteFile, isSelected, isDrag
         transition,
         isDragging,
     } = useSortable({ 
-        id: filePath,
+        id: id,
         disabled: !isDragEnabled 
     });
 
@@ -177,7 +179,7 @@ function SortableFileItem({ filePath, fileInfo, isRemoteFile, isSelected, isDrag
                 }
                 ${isDragging ? 'z-50' : ''}
             `}
-            onContextMenu={(e) => onContextMenu(e, filePath)}
+            onContextMenu={(e) => onContextMenu(e, id)}
         >
             {/* 拖动图标 */}
             {isDragEnabled && (
@@ -197,7 +199,7 @@ function SortableFileItem({ filePath, fileInfo, isRemoteFile, isSelected, isDrag
                     <TooltipTrigger asChild>
                         <div
                             className="flex-1 cursor-pointer overflow-hidden"
-                            onClick={() => onSelect(filePath)}
+                            onClick={() => onSelect(id)}
                         >
                             <div className="flex items-center w-full py-1">
                                 <div className="flex-1 text-left min-w-0">
@@ -239,12 +241,12 @@ function SortableFileItem({ filePath, fileInfo, isRemoteFile, isSelected, isDrag
 
 export function FileSidebar() {
     const [fileInfos, setFileInfos] = useAtom(fileInfosAtom)
-    const [nowFilePath, setNowFilePath] = useAtom(nowFilePathAtom)
+    const [nowFileId, setNowFileId] = useAtom(nowFileIdAtom)
     const [, setIsLeftPanelOpen] = useAtom(isLeftPanelOpenAtom)
     const [isDebugPanelOpen, setIsDebugPanelOpen] = useAtom(isDebugPanelOpenAtom)
     const [searchName, setSearchName] = useState<string>('')
-    const [contextMenu, setContextMenu] = useState<{ x: number; y: number; filePath: string; isRemoteFile: boolean } | null>(null)
-    const showFilePaths = useShowFilePaths(searchName)
+    const [contextMenu, setContextMenu] = useState<{ x: number; y: number; id: string; filePath: string; isRemoteFile: boolean } | null>(null)
+    const showFileIds = useShowFileIds(searchName)
 
     const sensors = useSensors(
         useSensor(PointerSensor),
@@ -253,27 +255,29 @@ export function FileSidebar() {
         })
     );
 
-    const onSelect = (filePath: string) => {
-        setNowFilePath(filePath)
+    const onSelect = (id: string) => {
+        setNowFileId(id)
     }
 
-    const onDelete = (filePath: string) => {
-        const newFileInfos = fileInfos.filter((file) => file.filePath !== filePath)
+    const onDelete = (id: string) => {
+        const newFileInfos = fileInfos.filter((file) => file.id !== id)
         setFileInfos(newFileInfos)
         saveFileInfos(newFileInfos)
-        if (nowFilePath === filePath) {
-            setNowFilePath('')
+        if (nowFileId === id) {
+            setNowFileId('')
         }
     }
 
-    const onContextMenu = (e: React.MouseEvent, filePath: string) => {
+    const onContextMenu = (e: React.MouseEvent, id: string) => {
         e.preventDefault()
-        const fileInfo = fileInfos.find(f => f.filePath === filePath)
-        const isRemoteFile = !!fileInfo?.remoteInfo
+        const fileInfo = fileInfos.find(f => f.id === id)
+        if (!fileInfo) return
+        const isRemoteFile = !!fileInfo.remoteInfo
         setContextMenu({
             x: e.clientX,
             y: e.clientY,
-            filePath,
+            id,
+            filePath: fileInfo.filePath,
             isRemoteFile
         })
     }
@@ -297,7 +301,7 @@ export function FileSidebar() {
     }
 
     const onAppTitleClick = () => {
-        setNowFilePath('')
+        setNowFileId('')
     }
 
     const onShowDebugPanel = () => {
@@ -313,8 +317,8 @@ export function FileSidebar() {
 
         // 只在没有搜索过滤时允许排序
         if (active.id !== over?.id && searchName.trim() === '') {
-            const oldIndex = fileInfos.findIndex((item) => item.filePath === active.id);
-            const newIndex = fileInfos.findIndex((item) => item.filePath === over?.id);
+            const oldIndex = fileInfos.findIndex((item) => item.id === active.id);
+            const newIndex = fileInfos.findIndex((item) => item.id === over?.id);
             
             const newFileInfos = arrayMove(fileInfos, oldIndex, newIndex);
             setFileInfos(newFileInfos);
@@ -356,7 +360,7 @@ export function FileSidebar() {
                 </div>
             </div>
             <ScrollArea className="flex-grow pl-2">
-                {!showFilePaths.length ? (
+                {!showFileIds.length ? (
                     <div className="flex items-center justify-center h-full text-gray-500 dark:text-gray-400">
                         <div className="text-center">
                             <div className="text-4xl mb-2">📁</div>
@@ -370,18 +374,20 @@ export function FileSidebar() {
                         collisionDetection={closestCenter}
                         onDragEnd={handleDragEnd}
                     >
-                        <SortableContext items={showFilePaths} strategy={verticalListSortingStrategy}>
-                            {showFilePaths.map((filePath) => {
-                                const fileInfo = fileInfos.find(f => f.filePath === filePath)
-                                const isRemoteFile = !!fileInfo?.remoteInfo
+                        <SortableContext items={showFileIds} strategy={verticalListSortingStrategy}>
+                            {showFileIds.map((id) => {
+                                const fileInfo = fileInfos.find(f => f.id === id)
+                                if (!fileInfo) return null
+                                const isRemoteFile = !!fileInfo.remoteInfo
                                 
                                 return (
                                     <SortableFileItem
-                                        key={filePath}
-                                        filePath={filePath}
+                                        key={id}
+                                        id={id}
+                                        filePath={fileInfo.filePath}
                                         fileInfo={fileInfo}
                                         isRemoteFile={isRemoteFile}
-                                        isSelected={nowFilePath === filePath}
+                                        isSelected={nowFileId === id}
                                         isDragEnabled={isDragEnabled}
                                         onSelect={onSelect}
                                         onDelete={onDelete}
@@ -397,6 +403,7 @@ export function FileSidebar() {
                 <ContextMenu
                     x={contextMenu.x}
                     y={contextMenu.y}
+                    id={contextMenu.id}
                     filePath={contextMenu.filePath}
                     isRemoteFile={contextMenu.isRemoteFile}
                     onClose={onCloseContextMenu}
