@@ -1,0 +1,7 @@
+/* 修复 ScrollArea 内部文本溢出问题 */
+#scroll-area-viewport>div {
+    display: flex !important;
+    flex-direction: column !important;
+    width: 100% !important;
+    min-width: 0 !important;
+}

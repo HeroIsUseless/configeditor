@@ -166,6 +166,7 @@ function SortableFileItem({ id, filePath, fileInfo, isRemoteFile, isSelected, is
                 group 
                 relative 
                 flex 
+                min-w-0
                 items-center 
                 w-full 
                 py-1 
@@ -178,7 +179,6 @@ function SortableFileItem({ id, filePath, fileInfo, isRemoteFile, isSelected, is
                     'bg-gray-200 dark:bg-gray-900' :
                     ''
                 }
-                bg-red-500
                 ${isDragging ? 'z-50' : ''}
             `}
             onContextMenu={(e) => onContextMenu(e, id)}
@@ -200,18 +200,20 @@ function SortableFileItem({ id, filePath, fileInfo, isRemoteFile, isSelected, is
                 <Tooltip>
                     <TooltipTrigger asChild>
                         <div
-                            className="flex-1 min-w-0 cursor-pointer py-1"
+                            className="flex-1 min-w-0 overflow-hidden cursor-pointer py-1"
                             onClick={() => onSelect(id)}
                         >
-                            <div className="font-medium text-gray-800 dark:text-gray-200 truncate flex items-center">
+                            <div className="font-medium text-gray-800 dark:text-gray-200 flex items-center overflow-hidden">
                                 {isRemoteFile && (
                                     <div title="远程文件" className="flex-shrink-0">
                                         <Globe className="mr-1 h-3 w-3 text-primary" />
                                     </div>
                                 )}
-                                {fileInfo?.description || (filePath.split('/')?.pop() ?? '')}
+                                <span className="truncate block">
+                                    {fileInfo?.description || (filePath.split('/')?.pop() ?? '')}
+                                </span>
                             </div>
-                            <div className="text-xs font-mono text-gray-500 dark:text-gray-400 truncate">
+                            <div className="text-xs font-mono text-gray-500 dark:text-gray-400 truncate block">
                                 {filePath}
                             </div>
                         </div>
@@ -355,7 +357,7 @@ export function FileSidebar() {
                     <AddFileButton />
                 </div>
             </div>
-            <ScrollArea className="flex-grow pl-2">
+            <ScrollArea className="flex-grow pl-2 w-full min-w-0 overflow-hidden">
                 {!showFileIds.length ? (
                     <div className="flex items-center justify-center h-full text-gray-500 dark:text-gray-400">
                         <div className="text-center">
