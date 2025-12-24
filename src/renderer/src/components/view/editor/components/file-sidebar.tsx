@@ -1,7 +1,7 @@
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import { fileInfosAtom, nowFileIdAtom, isLeftPanelOpenAtom, isDebugPanelOpenAtom, textContentAtom, newTextContentAtom, addDebugLogAtom } from '@/components/view/editor/store'
-import { ScrollArea } from '@radix-ui/react-scroll-area'
+import { ScrollArea } from '@/components/ui/scroll-area'
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from '@/components/ui/tooltip'
 import { useAtom } from 'jotai'
 import icon from '@/assets/icon.png'
@@ -39,6 +39,7 @@ import {
 import {
     CSS,
 } from '@dnd-kit/utilities'
+import { Separator } from '@/components/ui/separator';
 
 interface ContextMenuProps {
     x: number;
@@ -90,7 +91,7 @@ function ContextMenu({ x, y, id, filePath, isRemoteFile, onClose, onDelete, onSh
                     在Finder中打开
                 </button>
             )}
-            
+
             {/* 历史版本菜单项 */}
             <div className="relative">
                 <div
@@ -104,7 +105,7 @@ function ContextMenu({ x, y, id, filePath, isRemoteFile, onClose, onDelete, onSh
                     </div>
                     <ChevronRight className="h-4 w-4 text-gray-400 dark:text-gray-500" />
                 </div>
-                
+
                 {isHistoryMenuOpen && (
                     <HistoryMenu
                         filePath={filePath}
@@ -114,7 +115,7 @@ function ContextMenu({ x, y, id, filePath, isRemoteFile, onClose, onDelete, onSh
                     />
                 )}
             </div>
-            
+
             <button
                 className="w-full px-3 py-2 text-left text-sm text-red-600 dark:text-red-400 hover:bg-red-50 dark:hover:bg-red-900/20 flex items-center heroui-transition rounded-md"
                 onClick={handleDelete}
@@ -146,9 +147,9 @@ function SortableFileItem({ id, filePath, fileInfo, isRemoteFile, isSelected, is
         transform,
         transition,
         isDragging,
-    } = useSortable({ 
+    } = useSortable({
         id: id,
-        disabled: !isDragEnabled 
+        disabled: !isDragEnabled
     });
 
     const style = {
@@ -169,14 +170,15 @@ function SortableFileItem({ id, filePath, fileInfo, isRemoteFile, isSelected, is
                 w-full 
                 py-1 
                 px-1
+                mb-1
                 text-sm 
                 rounded-md
                 text-gray-700 dark:text-gray-300
-                heroui-transition 
                 ${isSelected ?
                     'bg-gray-200 dark:bg-gray-900' :
                     ''
                 }
+                bg-red-500
                 ${isDragging ? 'z-50' : ''}
             `}
             onContextMenu={(e) => onContextMenu(e, id)}
@@ -192,31 +194,25 @@ function SortableFileItem({ id, filePath, fileInfo, isRemoteFile, isSelected, is
                     <GripVertical className="h-4 w-4 text-gray-400 dark:text-gray-500" />
                 </div>
             )}
-            
+
             {/* 文件内容区域 - 只处理点击选择 */}
             <TooltipProvider>
                 <Tooltip>
                     <TooltipTrigger asChild>
                         <div
-                            className="flex-1 cursor-pointer overflow-hidden"
+                            className="flex-1 min-w-0 cursor-pointer py-1"
                             onClick={() => onSelect(id)}
                         >
-                            <div className="flex items-center w-full py-1">
-                                <div className="flex-1 text-left min-w-0">
-                                    <div className="font-medium text-gray-800 dark:text-gray-200 truncate flex items-center">
-                                        {isRemoteFile && (
-                                            <div title="远程文件" className="flex-shrink-0">
-                                                <Globe className="mr-1 h-3 w-3 text-primary" />
-                                            </div>
-                                        )}
-                                        <span className="truncate">
-                                            {fileInfo?.description || (filePath.split('/')?.pop() ?? '')}
-                                        </span>
+                            <div className="font-medium text-gray-800 dark:text-gray-200 truncate flex items-center">
+                                {isRemoteFile && (
+                                    <div title="远程文件" className="flex-shrink-0">
+                                        <Globe className="mr-1 h-3 w-3 text-primary" />
                                     </div>
-                                    <div className="text-xs font-mono text-gray-500 dark:text-gray-400 truncate">
-                                        {filePath}
-                                    </div>
-                                </div>
+                                )}
+                                {fileInfo?.description || (filePath.split('/')?.pop() ?? '')}
+                            </div>
+                            <div className="text-xs font-mono text-gray-500 dark:text-gray-400 truncate">
+                                {filePath}
                             </div>
                         </div>
                     </TooltipTrigger>
@@ -319,7 +315,7 @@ export function FileSidebar() {
         if (active.id !== over?.id && searchName.trim() === '') {
             const oldIndex = fileInfos.findIndex((item) => item.id === active.id);
             const newIndex = fileInfos.findIndex((item) => item.id === over?.id);
-            
+
             const newFileInfos = arrayMove(fileInfos, oldIndex, newIndex);
             setFileInfos(newFileInfos);
             saveFileInfos(newFileInfos);
@@ -331,9 +327,9 @@ export function FileSidebar() {
 
     return (
         <div className="pr-1 w-full h-full bg-gray-100 dark:bg-gray-800 flex flex-col" onClick={onCloseContextMenu}>
-            
+
             {/* Header */}
-            <div className="mb-4">
+            <div className="mb-3">
                 <div className='p-[15px] pr-[0px] flex justify-between items-center'>
                     <h2 className="text-base font-semibold flex items-center text-gray-700 dark:text-gray-300">
                         <img src={icon} className="h-[28px] w-[28px] mr-1 heroui-transition hover:opacity-80 cursor-pointer" onClick={onShowDebugPanel} alt="App Icon" />
@@ -379,7 +375,7 @@ export function FileSidebar() {
                                 const fileInfo = fileInfos.find(f => f.id === id)
                                 if (!fileInfo) return null
                                 const isRemoteFile = !!fileInfo.remoteInfo
-                                
+
                                 return (
                                     <SortableFileItem
                                         key={id}
